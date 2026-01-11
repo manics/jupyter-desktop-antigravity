@@ -4,9 +4,13 @@ updates:
     directory: /
     schedule:
       interval: monthly
+    groups:
+      all:
+        patterns:
+          - "*"
 
   # Bump dockerfile FROM
   - package-ecosystem: docker
     directory: /
     schedule:
-      interval: monthly
+      interval: weekly

@@ -1,14 +1,4 @@
 repos:
-  # Autoformat: Python code
-  - repo: https://github.com/psf/black
-    rev: 25.12.0
-    hooks:
-      - id: black
-        args:
-          - --target-version=py38
-          - --target-version=py39
-          - --target-version=py310
-
   # Autoformat: markdown, yaml
   - repo: https://github.com/rbubley/mirrors-prettier
     rev: v3.7.4
@@ -30,12 +20,9 @@ repos:
       - id: hadolint-docker
         entry: hadolint/hadolint:v2.12.1-beta hadolint
 
-  # Lint: Python
-  - repo: https://github.com/PyCQA/flake8
-    rev: 7.3.0
+  # Validate YAML/JSON against schemas
+  - repo: https://github.com/python-jsonschema/check-jsonschema
+    rev: 0.36.0
     hooks:
-      - id: flake8
-        args: [
-            # default black line length is 88
-            --max-line-length=88,
-          ]
+      - id: check-dependabot
+      - id: check-github-workflows
