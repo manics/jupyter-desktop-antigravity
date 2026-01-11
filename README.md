@@ -1,4 +1,4 @@
-# Jupyter Desktop MATE
+# Jupyter Desktop Antigravity
 
 [![Build](https://github.com/manics/jupyter-desktop-antigravity/actions/workflows/build.yaml/badge.svg)](https://github.com/manics/jupyter-desktop-antigravity/actions/workflows/build.yaml)
 

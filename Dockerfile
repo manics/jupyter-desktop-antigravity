@@ -21,7 +21,9 @@ RUN ln -s \
         /usr/share/applications/antigravity.desktop \
         "$HOME_TEMPLATE_DIR/Desktop"
 
-RUN mamba install --freeze-installed \
+RUN mamba install --yes --freeze-installed \
+        bash-completion \
+        git \
         go-cgo \
         kubernetes-client \
         kubernetes-helm \
