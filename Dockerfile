@@ -1,5 +1,4 @@
-# hadolint ignore=DL3007
-FROM ghcr.io/manics/jupyter-desktop-mate:latest
+FROM ghcr.io/manics/jupyter-desktop-mate:latest@sha256:fc3ac77e66d80f7606be20d9a96a7f926e60b6f5281271bad4ae22b13728628e
 
 USER root
 
