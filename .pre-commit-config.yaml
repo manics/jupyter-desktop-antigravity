@@ -1,0 +1,41 @@
+repos:
+  # Autoformat: Python code
+  - repo: https://github.com/psf/black
+    rev: 25.12.0
+    hooks:
+      - id: black
+        args:
+          - --target-version=py38
+          - --target-version=py39
+          - --target-version=py310
+
+  # Autoformat: markdown, yaml
+  - repo: https://github.com/rbubley/mirrors-prettier
+    rev: v3.7.4
+    hooks:
+      - id: prettier
+
+  # `pre-commit sample-config` default hooks
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v6.0.0
+    hooks:
+      - id: check-added-large-files
+      - id: end-of-file-fixer
+      - id: trailing-whitespace
+
+  # Lint: Dockerfile
+  - repo: https://github.com/hadolint/hadolint.git
+    rev: v2.14.0
+    hooks:
+      - id: hadolint-docker
+        entry: hadolint/hadolint:v2.12.1-beta hadolint
+
+  # Lint: Python
+  - repo: https://github.com/PyCQA/flake8
+    rev: 7.3.0
+    hooks:
+      - id: flake8
+        args: [
+            # default black line length is 88
+            --max-line-length=88,
+          ]

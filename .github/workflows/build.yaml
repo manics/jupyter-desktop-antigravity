@@ -1,0 +1,78 @@
+# This is a GitHub workflow defining a set of jobs with a set of steps.
+# ref: https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions
+#
+name: Build
+
+on:
+  pull_request:
+  push:
+    branches-ignore:
+      - "dependabot/**"
+    tags: ["**"]
+  workflow_dispatch:
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE: ${{ github.repository }}
+  # Set to "" to publish container on tags only
+  # Set to "<branch-name>" to also publish on every push to <branch-name>
+  PUBLISH_BRANCH: "main"
+  PLATFORMS: linux/amd64,linux/arm64
+
+jobs:
+  publish:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Decide whether to push image to registry
+        id: publish
+        run: |
+          PUSH=false
+          if [ "${{ startsWith(github.ref, 'refs/tags/') || (github.ref == format('refs/heads/{0}', env.PUBLISH_BRANCH)) }}" = "true" ]; then
+            if [ "${{ github.event_name }}" = "push" ]; then
+              PUSH=true
+            fi
+          fi
+          echo "push=$PUSH" >> $GITHUB_OUTPUT
+
+      - name: Docker meta
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          flavor: latest=false
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE }}
+          tags: |
+            # set latest tag for PUBLISH_BRANCH
+            type=raw,value=latest,enable=${{ github.ref == format('refs/heads/{0}', env.PUBLISH_BRANCH) }}
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Login to container registry
+        uses: docker/login-action@v3
+        if: steps.publish.outputs.push == 'true'
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push to container registry
+        uses: docker/build-push-action@v6
+        with:
+          platforms: ${{ env.PLATFORMS }}
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          push: ${{ steps.publish.outputs.push }}
+          # Don't use cache if this image will be published
+          cache-from: ${{ steps.publish.outputs.push == 'false' && 'type=gha' || '' }}
+          cache-to: ${{ steps.publish.outputs.push == 'false' && 'type=gha,mode=max' || '' }}
