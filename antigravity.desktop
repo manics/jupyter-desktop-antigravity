@@ -1,0 +1,14 @@
+# /usr/share/applications/antigravity.desktop, modified to disable GPU
+[Desktop Entry]
+Name=Antigravity
+Comment=Experience liftoff
+GenericName=Text Editor
+Exec=env ELECTRON_DISABLE_GPU=1 /usr/share/antigravity/antigravity --disable-gpu %F
+Icon=antigravity
+Type=Application
+StartupNotify=false
+StartupWMClass=Antigravity
+Categories=TextEditor;Development;IDE;
+MimeType=application/x-antigravity-workspace;
+Actions=new-empty-window;
+Keywords=vscode;

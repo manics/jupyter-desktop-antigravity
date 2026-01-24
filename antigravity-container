@@ -1,0 +1,33 @@
+#!/bin/bash
+
+set -eu
+
+IMAGE="${IMAGE:-ghcr.io/manics/jupyter-desktop-antigravity:latest}"
+RUNTIME_DIR="$HOME/containers/antigravity"
+PORT=5901
+RESOURCES="--cpus=2 --memory=4g --shm-size=2g"
+NAME=antigravity
+
+if command -v podman; then
+  ENGINE=podman
+else
+  ENGINE=docker
+fi
+
+if [ $# -gt 0 ]; then
+  ARGS=("$@")
+else
+  ARGS=(start-tigervnc.sh)
+fi
+
+"$ENGINE" run -it \
+  --name=$NAME \
+  --rm \
+  -e PASSWORD= \
+  -p 127.0.0.1:$PORT:5901 \
+  $RESOURCES \
+  -v "$RUNTIME_DIR:/home/jovyan:z" \
+  --tmpfs /tmp \
+  --read-only \
+  $IMAGE \
+  "${ARGS[@]}"

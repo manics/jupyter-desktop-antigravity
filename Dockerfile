@@ -8,26 +8,36 @@ RUN curl -fsSL https://us-central1-apt.pkg.dev/doc/repo-signing-key.gpg | \
         gpg --dearmor --yes -o /etc/apt/keyrings/antigravity-repo-key.gpg && \
     echo "deb [signed-by=/etc/apt/keyrings/antigravity-repo-key.gpg] https://us-central1-apt.pkg.dev/projects/antigravity-auto-updater-dev/ antigravity-debian main" > \
         /etc/apt/sources.list.d/antigravity.list && \
+        curl -fsSO https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb && \
     apt-get update -y -q && \
     apt-get install -y -q --no-install-recommends \
         antigravity \
+        bash-completion \
+        git \
+        gnome-keyring \
+        make \
         openssh-client \
+        ./google-chrome-stable_current_amd64.deb \
         && \
-    rm -rf /var/lib/apt/lists/*
+    apt-get remove -y -q \
+        mate-power-manager \
+        && \
+    apt-get autoremove -y -q && \
+    rm -rf \
+        /var/lib/apt/lists/* \
+        google-chrome-stable_current_amd64.deb
+
+# Silence ALSA warnings by creating a dummy configuration
+RUN echo -e 'pcm.!default { type null } \nctl.!default { type null }' > /etc/asound.conf
 
 USER $NB_USER
 
-RUN ln -s \
-        /usr/share/applications/antigravity.desktop \
-        "$HOME_TEMPLATE_DIR/Desktop"
-
 RUN mamba install --yes --freeze-installed \
-        bash-completion \
-        git \
         go-cgo \
         kubernetes-client \
         kubernetes-helm \
-        make \
         stern \
         && \
     mamba clean --all
+
+COPY --chown=$NB_UID:$NB_GID antigravity.desktop "$HOME_TEMPLATE_DIR/Desktop"
