@@ -13,9 +13,9 @@ apt-get update -y -q
 apt-get install -y -q --no-install-recommends \
     antigravity \
     bash-completion \
+    build-essential \
     git \
     gnome-keyring \
-    make \
     openssh-client
 
 # Google Chrome isn't available for linux/arm64
