@@ -5,7 +5,9 @@ set -eu
 IMAGE="${IMAGE:-ghcr.io/manics/jupyter-desktop-antigravity:latest}"
 RUNTIME_DIR="$HOME/containers/antigravity"
 PORT=5901
-RESOURCES="--cpus=2 --memory=4g --shm-size=2g"
+RESOURCES=(--cpus=2 --memory=4g --shm-size=2g)
+# Empty: disable authentication
+PASSWORD="${PASSWORD:-}"
 NAME=antigravity
 
 if command -v podman; then
@@ -21,13 +23,13 @@ else
 fi
 
 "$ENGINE" run -it \
-  --name=$NAME \
+  --name="$NAME" \
   --rm \
-  -e PASSWORD= \
+  -e PASSWORD="$PASSWORD" \
   -p 127.0.0.1:$PORT:5901 \
-  $RESOURCES \
+  "${RESOURCES[@]}" \
   -v "$RUNTIME_DIR:/home/jovyan:z" \
   --tmpfs /tmp \
   --read-only \
-  $IMAGE \
+  "$IMAGE" \
   "${ARGS[@]}"

@@ -6,4 +6,8 @@ A container image providing the [Google Antigravity IDE](https://antigravity.goo
 
 ## Usage
 
-See https://github.com/manics/jupyter-desktop-mate/
+Edit and run [`./antigravity-container`](./antigravity-container),
+then open `localhost:5901` in a VNC client.
+
+Alternatively see https://github.com/manics/jupyter-desktop-mate/ but use
+`ghcr.io/manics/jupyter-desktop-antigravity:latest` as the image.
