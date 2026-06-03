@@ -10,26 +10,38 @@ RESOURCES=(--cpus=2 --memory=4g --shm-size=2g)
 PASSWORD="${PASSWORD:-}"
 NAME=antigravity
 
-if command -v podman; then
+ENGINE_ARGS=()
+CMD_ARGS=()
+while [ $# -gt 0 ]; do
+  if [ "$1" = "--" ]; then
+    shift
+    CMD_ARGS=("$@")
+    break
+  fi
+  ENGINE_ARGS+=("$1")
+  shift
+done
+
+if command -v podman &> /dev/null; then
   ENGINE=podman
 else
   ENGINE=docker
 fi
 
-if [ $# -gt 0 ]; then
-  ARGS=("$@")
+if "$ENGINE" container exists $NAME; then
+  "$ENGINE" start -ai $NAME
 else
-  ARGS=(start-tigervnc.sh)
+  "$ENGINE" run -it \
+    --name=$NAME \
+    --rm \
+    -e PASSWORD="$PASSWORD" \
+    -p 127.0.0.1:$PORT:5901 \
+    "${RESOURCES[@]}" \
+    -v "$RUNTIME_DIR:/home/jovyan:z" \
+    --tmpfs /tmp \
+    --read-only \
+    "${ENGINE_ARGS[@]}" \
+    $IMAGE \
+    start-tigervnc.sh \
+    "${CMD_ARGS[@]}"
 fi
-
-"$ENGINE" run -it \
-  --name="$NAME" \
-  --rm \
-  -e PASSWORD="$PASSWORD" \
-  -p 127.0.0.1:$PORT:5901 \
-  "${RESOURCES[@]}" \
-  -v "$RUNTIME_DIR:/home/jovyan:z" \
-  --tmpfs /tmp \
-  --read-only \
-  "$IMAGE" \
-  "${ARGS[@]}"

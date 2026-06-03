@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=Antigravity Desktop
+Exec=/opt/Antigravity-Desktop/antigravity
+Icon=/opt/Antigravity IDE/resources/app/resources/linux/code.png
+Type=Application
+StartupNotify=false
+StartupWMClass=Antigravity Desktop
+Categories=TextEditor;Development;IDE;
+MimeType=application/x-antigravity-workspace;
