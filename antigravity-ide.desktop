@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=Antigravity IDE
+# Exec=env ELECTRON_DISABLE_GPU=1 "/opt/Antigravity IDE/antigravity-ide" --disable-gpu %F
+Exec=env ELECTRON_DISABLE_GPU=1 "/opt/Antigravity IDE/antigravity-ide" %F
+Icon=/opt/Antigravity IDE/resources/app/resources/linux/code.png
+Type=Application
+StartupNotify=false
+StartupWMClass=Antigravity IDE
+Categories=TextEditor;Development;IDE;
+MimeType=application/x-antigravity-workspace;
