@@ -1,4 +1,4 @@
-FROM ghcr.io/manics/jupyter-desktop-mate:latest@sha256:7a05e86c27a2dee9f053d8a2c209f55c8f495a49410e4720e2b13fa124c48128
+FROM ghcr.io/manics/jupyter-desktop-mate:latest@sha256:55c9e8cac166cc1386d3e12932cf7d2f00ab1e051823bdaf780134cee2f6f9ff
 
 USER root
 
